@@ -62,11 +62,10 @@ class Emailer():
         return msg
 
     def sendEmails(self, subject_line, msgBody, fname_attachment=None, fname_attachment_fullpath=None, recipients=None, attachment_dictList = None, isETL=True):
-        recipients = {}
+        print recipients
         if(isETL):
             fromaddr = self._etl_sender
             recipients['To'] = self.getRecipients()
-
         else:
             fromaddr = self._sender
             recipients = recipients
