@@ -52,5 +52,5 @@ jobs:
     job_name: Send Update Emails
     app_name: Send Update Emails
   screendoor_and_upload:
-    job_name: Upload ScreenDoor Submissions for Systems Inventory Update
-    app_name: Upload ScreenDoor Submissions for Systems Inventory Update
+    job_name: Systems Inventory Update - Import Spreadsheets
+    app_name: Systems Inventory Update - Import Spreadsheets

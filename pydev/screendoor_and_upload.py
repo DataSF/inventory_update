@@ -207,9 +207,7 @@ def main():
       result['datasets_required_total'] = int(getSums(sQobj,base_url, fbf_datasets_inventory , 'required_fields_count', 'department_or_division', result['department_or_division'] ))
       result['datasets_required_complete'] =  int(getSums(sQobj,base_url, fbf_datasets_inventory , 'required_fields_complete', 'department_or_division', result['department_or_division'] ))
       result['datasets_required_remaining'] = result['datasets_required_total'] - result['datasets_required_complete']
-  print results
   dsse = JobStatusEmailerComposer(configItems, logger, jobType)
-
   dataset_info = {'Socrata Dataset Name': configItems['dd']['index']['dataset_name'], 'SrcRecordsCnt':len(results), 'DatasetRecordsCnt':0, 'fourXFour': configItems['dd']['index']['fbf'], 'row_id': 'department_or_division'}
   dataset_info = scrud.postDataToSocrata(dataset_info, results )
   dataset_info['isLoaded'] = 'success'

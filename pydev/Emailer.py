@@ -62,8 +62,8 @@ class Emailer():
         return msg
 
     def sendEmails(self, subject_line, msgBody, fname_attachment=None, fname_attachment_fullpath=None, recipients=None, attachment_dictList = None, isETL=True):
-        print recipients
         if(isETL):
+            recipients = {}
             fromaddr = self._etl_sender
             recipients['To'] = self.getRecipients()
         else:
