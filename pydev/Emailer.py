@@ -105,6 +105,7 @@ class Emailer():
         #server.starttls()
         #server.login(fromaddr, self._password)
         text = msg.as_string()
+        print text
         server.sendmail(fromaddr, [toaddr, cc, bcc] , text)
         server.quit()
 
