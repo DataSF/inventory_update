@@ -79,8 +79,8 @@ def main():
     if 'secondary_data_coordinator' in item.keys():
       recipientsActual['cc'] = item['secondary_data_coordinator']
     print recipientsActual
-    recipientsFake =  { 'To': 'dooh@sfgov.org', 'cc':'bo@sfgov.org', 'bcc': 'janine.heiser@sfgov.org'}
-    mail_recipient = e.sendEmails(subject_line, msgBody, fname_attachment=None, fname_attachment_fullpath=None, recipients=recipientsFake, attachment_dictList = attachment_dictList, isETL=False)
+    #recipientsFake =  { 'To': 'dooh@sfgov.org', 'cc':'bo@sfgov.org', 'bcc': 'janine.heiser@sfgov.org'}
+    mail_recipient = e.sendEmails(subject_line, msgBody, fname_attachment=None, fname_attachment_fullpath=None, recipients=recipientsActual, attachment_dictList = attachment_dictList, isETL=False)
 
 if __name__ == "__main__":
     main()
