@@ -36,16 +36,16 @@
                 It&#39;s time for the annual inventory update! We&#39;ve made some small changes given the establishment of <a href="http://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=6270.5."> CA Government Code 6270.5</a> requiring a public inventory of &#34;enterprise systems of record&#34;.
             </p>
             <p>
-                <b>Please note, every department will have to submit </b> an edited version of the attached inventory workbook (%s) by MM/DD/YYYY.
+                <b>Please note, every department will have to submit </b> an edited version of the attached inventory workbook (%s) by <b>05/22/2017</b>.
             </p>
             <p>
-                Attached is 6 pages of guidance (InventoryUpdateGuidance.pdf) for removing, adding and editing system and dataset records. Please follow those carefully and do not remove rows from either inventory worksheet.
+                Attached is 2 pages of update guidance with 4 pages of reference (InventoryUpdateGuidance.pdf) for removing, adding and editing system and dataset records. Please follow the guidance carefully and do not remove rows from either inventory worksheet.
             </p>
             <p>
                 <b>NEW FIELD</b>: While you may not have additions or subtractions in either inventory, we have added the column &#34;Purpose&#34; to the systems inventory. <b> Every department will have to complete this field for disclosed systems</b>. The Sunshine Task Force requested this to improve comparison with the state code. Example statements of purpose are provided in the guidance.
             </p>
             <p>
-                Please upload the workbook through the <a href="https://sfgov.forms.fm/inventory-update-submission">inventory submission form</a> by MM/DD/YYYY.
+               <a href="https://sfgov.forms.fm/inventory-update-submission">Please upload the workbook through the inventory submission form</a> by 05/22/2017.
             </p>
         </div>
         <p>

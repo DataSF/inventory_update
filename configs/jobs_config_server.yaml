@@ -1,0 +1,54 @@
+
+
+#dir configs
+log_dir: /home/ubuntu/inventory_update/logs/
+config_dir: /home/ubuntu/inventory_update/configs/
+inputConfigDir: /home/ubuntu/inventory_update/configs/
+wkbk_dir: /home/ubuntu/inventory_update/wkbks
+
+
+email_config_file: email_config_sever.yaml
+screendoor_config_file: screendoor_configs_server.yaml
+
+#socrata specific configs
+row_id_field: row_id
+src_records_cnt_field: SrcRecordsCnt
+dataset_records_cnt_field: DatasetRecordsCnt
+fourXFour: fourXFour
+isLoaded: isLoaded
+datasets_to_load_fn: datasets_to_load.csv
+dataset_name_field: Socrata Dataset Name
+dataset_src_dir_field:  Dataset_Source_Dir
+dataset_src_fn_field: Dataset Source Filename
+base_url: data.sfgov.org
+base_url_qry: https://data.sfgov.org/resource/
+exception_logfile: systems_updt_exception_log.txt
+app_name: Systems_Updt
+socrata_client_config_fname: socrata_config.yaml
+
+
+dd:
+  index:
+    fbf: qjg2-n324
+    qryCols: coordinator_name, primary_data_coordinator, secondary_data_coordinator, template_file_name WHERE primary_data_coordinator IS NOT NULL
+    dataset_name: Index
+
+  Dataset Inventory:
+    fbf: gmfs-4myt
+    dataset_name: Dataset Inventory Submission
+  Systems Inventory:
+    fbf: 899a-ny68
+    dataset_name: Systems Inventory Submission
+
+
+wkbks:
+    shts_to_keep:  ['Systems Inventory', 'Dataset Inventory']
+
+
+jobs:
+  send_update_emails:
+    job_name: Send Update Emails
+    app_name: Send Update Emails
+  screendoor_and_upload:
+    job_name: Systems Inventory Update - Import Spreadsheets
+    app_name: Systems Inventory Update - Import Spreadsheets
