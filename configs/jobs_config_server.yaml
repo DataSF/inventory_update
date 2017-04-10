@@ -7,7 +7,7 @@ inputConfigDir: /home/ubuntu/inventory_update/configs/
 wkbk_dir: /home/ubuntu/inventory_update/wkbks
 
 
-email_config_file: email_config_sever.yaml
+email_config_file: email_config_server.yaml
 screendoor_config_file: screendoor_configs_server.yaml
 
 #socrata specific configs
