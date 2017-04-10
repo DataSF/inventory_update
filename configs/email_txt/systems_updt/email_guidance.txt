@@ -16,7 +16,7 @@
     <meta name="description" content="Our mission is to empower use of the City and County of San Francisco's data. Our core product is SF OpenData, the official open data portal.">
 
     <style>
-        body{ font-family:"Alegreya","Helvetica Neue",Helvetica,Arial,sans-serif;color:#333333;font-size:18px;margin-top:50px;}
+        body{ font-family: "Calibri", "Candara", "Segoe", "Segoe UI", "Optima", Arial, sans-serif;color:#333333;font-size:18px;margin-top:50px;}
         table, th, td {border: 1px solid #D3D3D3; border-collapse: collapse; padding: 5px; }
         th { background-color:#D3D3D3;  font-weight: bold; text-align: left; padding-left:10px; padding-right:10px;}
         table tr:nth-child(even) { background-color: #FAFAFA;}
@@ -27,9 +27,9 @@
     </style>
     </head>
     <body>
-        <H2>
+        <p>
             Hello %s,
-        </H2>
+        </p>
 
         <div>
             <p>
