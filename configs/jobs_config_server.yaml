@@ -4,7 +4,7 @@
 log_dir: /home/ubuntu/inventory_update/logs/
 config_dir: /home/ubuntu/inventory_update/configs/
 inputConfigDir: /home/ubuntu/inventory_update/configs/
-wkbk_dir: /home/ubuntu/inventory_update/wkbks
+wkbk_dir: /home/ubuntu/inventory_update/wkbks/
 
 
 email_config_file: email_config_server.yaml
