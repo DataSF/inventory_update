@@ -74,7 +74,7 @@ def main():
   wkbks_dir = configItems['wkbk_dir']+ '/blank_wkbks/'
   for item in email_list[0:2]:
     msgBody  = base_email_txt % (item['coordinator_name'], item['template_file_name'])
-    attachment_dictList = [{item['template_file_name']: wkbks_dir+item['template_file_name']},{ 'InventoryUpdateGuidance.pdf': wkbks_dir+'InventoryUpdateGuidance.pdf'}]
+    attachment_dictList = [{item['template_file_name']: wkbks_dir+item['template_file_name']}]
     recipientsActual = {'To':item['primary_data_coordinator'], 'bcc': 'jason.lally@sfgov.org'}
     if 'secondary_data_coordinator' in item.keys():
       recipientsActual['cc'] = item['secondary_data_coordinator']
