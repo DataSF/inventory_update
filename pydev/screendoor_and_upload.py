@@ -147,7 +147,14 @@ def main():
       continue
     elif response['responses'][dept_key] in maxResponses.keys():
       '''need to find the actual time duration here'''
-      maxResponses[ response['responses'][dept_key]] = response['submitted_at']
+      #print "original"
+      #print maxResponses[ response['responses'][dept_key]]
+      #print "new"
+      #print response['submitted_at']
+      if DateUtils.compare_two_timestamps(response['submitted_at'], maxResponses[ response['responses'][dept_key]]):
+        #print "we got a later submission"
+        #print response['submitted_at']
+        maxResponses[ response['responses'][dept_key]] = response['submitted_at']
     else:
       maxResponses[ response['responses'][dept_key]] = response['submitted_at']
   for response in screendoor_stuff._responses:
@@ -157,7 +164,6 @@ def main():
       file_info['submitted_at'] = response['submitted_at']
       file_info['dept'] = dept
       downloadFiles.append(file_info)
-
   #download the files and parse the workbks
   shts_to_keep = configItems['wkbks']['shts_to_keep']
   print shts_to_keep
