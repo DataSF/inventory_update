@@ -95,16 +95,16 @@ class Emailer():
                 fname_attachment_fullpath = attachment.values()
                 fname_attachment_fullpath = fname_attachment_fullpath[0]
                 if os.path.isfile(fname_attachment_fullpath):
-                    print fname_attachment_fullpath
+                    #print fname_attachment_fullpath
                     msg = self.make_attachment(msg, fname, fname_attachment_fullpath)
                 else:
                     print "Errror: file doesn't exist"
                     print fname_attachment_fullpath
         #normal emails, no attachment
         server = smtplib.SMTP(self._server, self._server_port)
-        print self._server
-        print self._server_port
-        print server
+        #print self._server
+        #print self._server_port
+        #print server
         #server.starttls()
         #server.login(fromaddr, self._password)
         text = msg.as_string()
