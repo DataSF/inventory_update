@@ -184,8 +184,6 @@ def main():
           df['required_fields_count'] =  df.apply(lambda row: getRequiredFieldCountInventory(row), axis=1)
           df['required_fields_complete'] =  df.apply(lambda row:getRequiredFieldsCompleteInventory(row), axis=1)
           df['department_custodian'] = df['department_custodian'].astype(str)
-          print df['department_custodian']
-
           df = df[df['department_custodian'] != '' ].reset_index()
         elif sht == 'Dataset Inventory':
           df['required_fields_count'] =  df.apply(lambda row: getRequiredFieldCountDatasets(row), axis=1)
@@ -213,9 +211,10 @@ def main():
 
   if results:
     for result in results:
-      print results
+      result['department_or_division'] = str(result['department_or_division']).strip()
+      print result['department_or_division'] 
       result['submitted'] = True
-      result['submitted_systems_row_count'] = int(getSubmittedCnt(sQobj,base_url, fbf_systems_inventory, 'department_custodian', 'submitted_systems_row_count', str(result['department_or_division']).strip()     ))
+      result['submitted_systems_row_count'] = int(getSubmittedCnt(sQobj,base_url, fbf_systems_inventory, 'department_custodian', 'submitted_systems_row_count', result['department_or_division'] ))
       result['systems_required_total'] = int(getSums(sQobj,base_url, fbf_systems_inventory, 'required_fields_count', 'department_custodian', result['department_or_division'] ))
       result['systems_required_complete'] =  int(getSums(sQobj,base_url, fbf_systems_inventory, 'required_fields_complete', 'department_custodian', result['department_or_division'] ))
       result['systems_required_remaining'] = result['systems_required_total'] - result['systems_required_complete']
