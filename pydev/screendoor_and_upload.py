@@ -210,10 +210,10 @@ def main():
   print results
   if results:
     for result in results:
-      result['department_custodian'] = str(result['department_custodian']).strip()
-      if result['department_or_division'] == '311.0':
-        result['department_or_division'] = '311'
-      print result['department_or_division'] 
+      result['department_custodian'] = str(result['department_custodian]).strip()
+      if result['department_custodian'] == '311.0':
+        result['department_custodian'] = '311'
+      print result['department_custodian'] 
       result['submitted'] = True
       result['submitted_systems_row_count'] = int(getSubmittedCnt(sQobj,base_url, fbf_systems_inventory, 'department_custodian', 'submitted_systems_row_count', result['department_or_division'] ))
       result['systems_required_total'] = int(getSums(sQobj,base_url, fbf_systems_inventory, 'required_fields_count', 'department_custodian', result['department_or_division'] ))
