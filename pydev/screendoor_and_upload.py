@@ -98,7 +98,8 @@ def getRequiredFieldsCompleteDatasets(row):
   return sum([ 1 for key in rowKeys if ((row[key] != '') and (key in fields_to_cnt))])
 
 def getCountsDepts(sQobj,base_url, fbf, key, results_key):
-  if key == 'department_or_division':
+  console.log(key)
+  if key != 'department_or_division':
     qry = '''%s%s.json?$query=SELECT %s, count(*) as %s GROUP BY %s ''' %(base_url, fbf, key, results_key, key)
   else:
     qry = '''%s%s.json?$query=SELECT %s as department_or_division, count(*) as %s GROUP BY %s ''' %(base_url, fbf, key, results_key, key)
@@ -205,7 +206,7 @@ def main():
   fbf_datasets_inventory = configItems['dd']['Dataset Inventory']['fbf']
   fbf_systems_inventory = configItems['dd']['Systems Inventory']['fbf']
   print fbf_systems_inventory
-  results = getCountsDepts(sQobj,base_url, fbf_systems_inventory, 'department_or_division', 'submitted_dataset_row_count')
+  results = getCountsDepts(sQobj,base_url, fbf_systems_inventory, 'department_custodian', 'submitted_dataset_row_count')
   print results
   if results:
     for result in results:
