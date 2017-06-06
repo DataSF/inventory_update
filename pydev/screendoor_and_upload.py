@@ -168,9 +168,6 @@ def main():
   shts_to_keep = configItems['wkbks']['shts_to_keep']
   print shts_to_keep
   for fn in downloadFiles:
-    print 
-    print fn
-    print
     downloaded = screendoor_stuff.getAttachment(fn['id'], fn['filename'])
     if downloaded:
       wkbk_stuff = WkbkUtils.get_shts(download_dir + fn['filename'])
@@ -221,13 +218,13 @@ def main():
       result['datasets_required_total'] = int(getSums(sQobj,base_url, fbf_datasets_inventory , 'required_fields_count', 'department_or_division', result['department_or_division'] ))
       result['datasets_required_complete'] =  int(getSums(sQobj,base_url, fbf_datasets_inventory , 'required_fields_complete', 'department_or_division', result['department_or_division'] ))
       result['datasets_required_remaining'] = result['datasets_required_total'] - result['datasets_required_complete']
-  #dsse = JobStatusEmailerComposer(configItems, logger, jobType)
-  #dataset_info = {'Socrata Dataset Name': configItems['dd']['index']['dataset_name'], 'SrcRecordsCnt':len(results), 'DatasetRecordsCnt':0, 'fourXFour': configItems['dd']['index']['fbf'], 'row_id': 'department_or_division'}
-  #dataset_info = scrud.postDataToSocrata(dataset_info, results )
-  #dataset_info['isLoaded'] = 'success'
-  #dataset_results.append(dataset_info)
-  #dsse.sendJobStatusEmail(dataset_results)
-  #print dataset_results
+  dsse = JobStatusEmailerComposer(configItems, logger, jobType)
+  dataset_info = {'Socrata Dataset Name': configItems['dd']['index']['dataset_name'], 'SrcRecordsCnt':len(results), 'DatasetRecordsCnt':0, 'fourXFour': configItems['dd']['index']['fbf'], 'row_id': 'department_or_division'}
+  dataset_info = scrud.postDataToSocrata(dataset_info, results )
+  dataset_info['isLoaded'] = 'success'
+  dataset_results.append(dataset_info)
+  dsse.sendJobStatusEmail(dataset_results)
+  print dataset_results
 
 #change subject line on ETL email
 
