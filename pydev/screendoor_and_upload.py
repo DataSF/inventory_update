@@ -98,7 +98,7 @@ def getRequiredFieldsCompleteDatasets(row):
   return sum([ 1 for key in rowKeys if ((row[key] != '') and (key in fields_to_cnt))])
 
 def getCountsDepts(sQobj,base_url, fbf, key, results_key):
-  console.log(key)
+  print key
   if key != 'department_or_division':
     qry = '''%s%s.json?$query=SELECT %s, count(*) as %s GROUP BY %s ''' %(base_url, fbf, key, results_key, key)
   else:
