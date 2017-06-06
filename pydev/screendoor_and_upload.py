@@ -183,8 +183,8 @@ def main():
         if sht == 'Systems Inventory':
           df['required_fields_count'] =  df.apply(lambda row: getRequiredFieldCountInventory(row), axis=1)
           df['required_fields_complete'] =  df.apply(lambda row:getRequiredFieldsCompleteInventory(row), axis=1)
-          df['department_or_division'] = df['department_or_division'].astype(str)
-          print df['department_or_division']
+          df['department_custodian'] = df['department_custodian'].astype(str)
+          print df['department_custodian']
 
           df = df[df['department_custodian'] != '' ].reset_index()
         elif sht == 'Dataset Inventory':
