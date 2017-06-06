@@ -205,7 +205,7 @@ def main():
   fbf_datasets_inventory = configItems['dd']['Dataset Inventory']['fbf']
   fbf_systems_inventory = configItems['dd']['Systems Inventory']['fbf']
   results = getCountsDepts(sQobj,base_url, fbf_systems_inventory, 'department_or_division', 'submitted_dataset_row_count')
-
+  print results
   if results:
     for result in results:
       result['department_or_division'] = str(result['department_or_division']).strip()
@@ -220,6 +220,7 @@ def main():
       result['datasets_required_total'] = int(getSums(sQobj,base_url, fbf_datasets_inventory , 'required_fields_count', 'department_or_division', result['department_or_division'] ))
       result['datasets_required_complete'] =  int(getSums(sQobj,base_url, fbf_datasets_inventory , 'required_fields_complete', 'department_or_division', result['department_or_division'] ))
       result['datasets_required_remaining'] = result['datasets_required_total'] - result['datasets_required_complete']
+  
   dsse = JobStatusEmailerComposer(configItems, logger, jobType)
   dataset_info = {'Socrata Dataset Name': configItems['dd']['index']['dataset_name'], 'SrcRecordsCnt':len(results), 'DatasetRecordsCnt':0, 'fourXFour': configItems['dd']['index']['fbf'], 'row_id': 'department_or_division'}
   dataset_info = scrud.postDataToSocrata(dataset_info, results )
