@@ -210,7 +210,7 @@ def main():
   print results
   if results:
     for result in results:
-      result['department_or_division'] = str(result['department_or_division']).strip()
+      result['department_custodian'] = str(result['department_custodian']).strip()
       if result['department_or_division'] == '311.0':
         result['department_or_division'] = '311'
       print result['department_or_division'] 
