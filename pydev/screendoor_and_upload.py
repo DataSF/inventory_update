@@ -209,7 +209,7 @@ def main():
   if results:
     for result in results:
       result['department_or_division'] = str(result['department_or_division']).strip()
-      if result['department_or_division'] = '311.0':
+      if result['department_or_division'] == '311.0':
         result['department_or_division'] = '311'
       print result['department_or_division'] 
       result['submitted'] = True
