@@ -141,11 +141,11 @@ def main():
   #
   #grab the most recent submission
   maxResponses = {}
-  dept_key =  str(screendoor_stuff._screendoor_configs['keys_to_keep']['department']).trim()
+  dept_key =  str(screendoor_stuff._screendoor_configs['keys_to_keep']['department']).strip()
   for response in screendoor_stuff._responses:
-    if str(response['responses'][dept_key]).trim() in submitted:
+    if str(response['responses'][dept_key]).strip() in submitted:
       continue
-    elif str(response['responses'][dept_key]).trim() in maxResponses.keys():
+    elif str(response['responses'][dept_key]).strip() in maxResponses.keys():
       '''need to find the actual time duration here'''
       #print "original"
       #print maxResponses[ response['responses'][dept_key]]
@@ -158,7 +158,7 @@ def main():
     else:
       maxResponses[ response['responses'][dept_key]] = response['submitted_at']
   for response in screendoor_stuff._responses:
-    dept = str(response['responses'][dept_key]).trim()
+    dept = str(response['responses'][dept_key]).strip()
     if (response['submitted_at'] == maxResponses[dept]) and (not(dept in submitted )):
       file_info =  response['responses'][screendoor_stuff._screendoor_configs['keys_to_keep']['file']][0]
       file_info['submitted_at'] = response['submitted_at']
