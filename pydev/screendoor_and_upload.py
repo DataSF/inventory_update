@@ -204,6 +204,7 @@ def main():
   base_url = configItems['base_url_qry']
   fbf_datasets_inventory = configItems['dd']['Dataset Inventory']['fbf']
   fbf_systems_inventory = configItems['dd']['Systems Inventory']['fbf']
+  print fbf_systems_inventory
   results = getCountsDepts(sQobj,base_url, fbf_systems_inventory, 'department_or_division', 'submitted_dataset_row_count')
   print results
   if results:
