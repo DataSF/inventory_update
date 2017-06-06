@@ -213,21 +213,22 @@ def main():
 
   if results:
     for result in results:
+      print results
       result['submitted'] = True
-      result['submitted_systems_row_count'] = int(getSubmittedCnt(sQobj,base_url, fbf_systems_inventory, 'department_custodian', 'submitted_systems_row_count', result['department_or_division']))
+      result['submitted_systems_row_count'] = int(getSubmittedCnt(sQobj,base_url, fbf_systems_inventory, 'department_custodian', 'submitted_systems_row_count', str(result['department_or_division']).strip())
       result['systems_required_total'] = int(getSums(sQobj,base_url, fbf_systems_inventory, 'required_fields_count', 'department_custodian', result['department_or_division'] ))
       result['systems_required_complete'] =  int(getSums(sQobj,base_url, fbf_systems_inventory, 'required_fields_complete', 'department_custodian', result['department_or_division'] ))
       result['systems_required_remaining'] = result['systems_required_total'] - result['systems_required_complete']
       result['datasets_required_total'] = int(getSums(sQobj,base_url, fbf_datasets_inventory , 'required_fields_count', 'department_or_division', result['department_or_division'] ))
       result['datasets_required_complete'] =  int(getSums(sQobj,base_url, fbf_datasets_inventory , 'required_fields_complete', 'department_or_division', result['department_or_division'] ))
       result['datasets_required_remaining'] = result['datasets_required_total'] - result['datasets_required_complete']
-  dsse = JobStatusEmailerComposer(configItems, logger, jobType)
+  #dsse = JobStatusEmailerComposer(configItems, logger, jobType)
   dataset_info = {'Socrata Dataset Name': configItems['dd']['index']['dataset_name'], 'SrcRecordsCnt':len(results), 'DatasetRecordsCnt':0, 'fourXFour': configItems['dd']['index']['fbf'], 'row_id': 'department_or_division'}
   dataset_info = scrud.postDataToSocrata(dataset_info, results )
-  dataset_info['isLoaded'] = 'success'
-  dataset_results.append(dataset_info)
-  dsse.sendJobStatusEmail(dataset_results)
-  print dataset_results
+  #dataset_info['isLoaded'] = 'success'
+  #dataset_results.append(dataset_info)
+  #dsse.sendJobStatusEmail(dataset_results)
+  #print dataset_results
 
 #change subject line on ETL email
 
