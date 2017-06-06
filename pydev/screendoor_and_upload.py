@@ -168,6 +168,9 @@ def main():
   shts_to_keep = configItems['wkbks']['shts_to_keep']
   print shts_to_keep
   for fn in downloadFiles:
+    print 
+    print fn
+    print
     downloaded = screendoor_stuff.getAttachment(fn['id'], fn['filename'])
     if downloaded:
       wkbk_stuff = WkbkUtils.get_shts(download_dir + fn['filename'])
