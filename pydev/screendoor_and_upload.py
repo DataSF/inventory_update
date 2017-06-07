@@ -215,12 +215,12 @@ def main():
         result['department_custodian'] = '311'
       print result['department_custodian'] 
       result['submitted'] = True
-      result['submitted_systems_row_count'] = int(getSubmittedCnt(sQobj,base_url, fbf_systems_inventory, 'department_custodian', 'submitted_systems_row_count', result['department_or_division'] ))
-      result['systems_required_total'] = int(getSums(sQobj,base_url, fbf_systems_inventory, 'required_fields_count', 'department_custodian', result['department_or_division'] ))
-      result['systems_required_complete'] =  int(getSums(sQobj,base_url, fbf_systems_inventory, 'required_fields_complete', 'department_custodian', result['department_or_division'] ))
+      result['submitted_systems_row_count'] = int(getSubmittedCnt(sQobj,base_url, fbf_systems_inventory, 'department_custodian', 'submitted_systems_row_count', result['department_custodian'] ))
+      result['systems_required_total'] = int(getSums(sQobj,base_url, fbf_systems_inventory, 'required_fields_count', 'department_custodian', result['department_custodian'] ))
+      result['systems_required_complete'] =  int(getSums(sQobj,base_url, fbf_systems_inventory, 'required_fields_complete', 'department_custodian', result['department_custodian'] ))
       result['systems_required_remaining'] = result['systems_required_total'] - result['systems_required_complete']
-      result['datasets_required_total'] = int(getSums(sQobj,base_url, fbf_datasets_inventory , 'required_fields_count', 'department_or_division', result['department_or_division'] ))
-      result['datasets_required_complete'] =  int(getSums(sQobj,base_url, fbf_datasets_inventory , 'required_fields_complete', 'department_or_division', result['department_or_division'] ))
+      result['datasets_required_total'] = int(getSums(sQobj,base_url, fbf_datasets_inventory , 'required_fields_count', 'department_or_division', result['department_custodian'] ))
+      result['datasets_required_complete'] =  int(getSums(sQobj,base_url, fbf_datasets_inventory , 'required_fields_complete', 'department_or_division', result['department_custodian'] ))
       result['datasets_required_remaining'] = result['datasets_required_total'] - result['datasets_required_complete']
   
   dsse = JobStatusEmailerComposer(configItems, logger, jobType)
