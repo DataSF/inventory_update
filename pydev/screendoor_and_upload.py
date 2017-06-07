@@ -229,7 +229,7 @@ def main():
   dataset_info['isLoaded'] = 'success'
   dataset_results.append(dataset_info)
   dsse.sendJobStatusEmail(dataset_results)
-  print dataset_results
+  #print dataset_results
 
 #change subject line on ETL email
 
