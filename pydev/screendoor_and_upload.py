@@ -142,8 +142,8 @@ def main():
   maxResponses = {}
   dept_key =  str(screendoor_stuff._screendoor_configs['keys_to_keep']['department']).strip()
   for response in screendoor_stuff._responses:
-    print
-    print response
+    #print
+    #print response
     if str(response['responses'][dept_key]).strip() in submitted:
       continue
     elif str(response['responses'][dept_key]).strip() in maxResponses.keys():
