@@ -102,7 +102,8 @@ def getCountsDepts(sQobj,base_url, fbf, key, results_key):
   if key != 'department_or_division':
     qry = '''%s%s.json?$query=SELECT %s, count(*) as %s GROUP BY %s ''' %(base_url, fbf, key, results_key, key)
   else:
-    qry = '''%s%s.json?$query=SELECT %s as department_or_division, count(*) as %s GROUP BY %s ''' %(base_url, fbf, key, results_key, key)
+    qry = '''%s%s.json?$query=SELECT %s,  count(*) as %s GROUP BY %s ''' %(base_url, fbf, key, results_key, key)
+  print qry
   return sQobj.getQryFull(qry)
 
 
@@ -127,15 +128,12 @@ def main():
   scrud = SocrataCRUD(client, clientItems, configItems, logger)
   screendoor_stuff = ScreenDoorStuff(configItems)
   sQobj = SocrataQueries(clientItems, configItems, logger)
-
-  qryColsSubmitted = 'department_or_division WHERE submitted = True'
+  #qryColsSubmitted = 'department_or_division WHERE submitted = True'
   #submitted =  DatasetUtils.getDatasetAsDictListPageThrough(configItems['dd']['index']['fbf'], sQobj, qryColsSubmitted)
   #submitted = [ item['department_or_division'] for item in submitted ]
   submitted = []
   download_dir = screendoor_stuff._wkbk_uploads_dir
-
-
-  ''''download the files from screendoor'''
+  #download the files from screendoor
   remove_files = FileUtils.remove_files_on_regex(screendoor_stuff._screendoor_configs['wkbk_uploads_dir'], "*.xlsx")
   downloadFiles = []
   datasets_to_load = {'Systems Inventory': [], 'Dataset Inventory': []}
@@ -144,10 +142,12 @@ def main():
   maxResponses = {}
   dept_key =  str(screendoor_stuff._screendoor_configs['keys_to_keep']['department']).strip()
   for response in screendoor_stuff._responses:
+    print
+    print response
     if str(response['responses'][dept_key]).strip() in submitted:
       continue
     elif str(response['responses'][dept_key]).strip() in maxResponses.keys():
-      '''need to find the actual time duration here'''
+      #need to find the actual time duration here
       #print "original"
       #print maxResponses[ response['responses'][dept_key]]
       #print "new"
@@ -167,7 +167,6 @@ def main():
       downloadFiles.append(file_info)
   #download the files and parse the workbks
   shts_to_keep = configItems['wkbks']['shts_to_keep']
-  print shts_to_keep
   for fn in downloadFiles:
     downloaded = screendoor_stuff.getAttachment(fn['id'], fn['filename'])
     if downloaded:
@@ -189,8 +188,16 @@ def main():
           df['department_or_division'] = df['department_or_division'].astype(str)
           #print df['department_or_division']
           df = df[df['department_or_division'] != ''].reset_index()
-          df['start_date'] =  df['start_date'].astype(str)
-          df['end_date'] =  df['end_date'].astype(str)
+          try:
+            df['start_date'] =  df['start_date'].astype(object).astype(str)
+          except Exception, e:
+            print str(e)
+            print  df['start_date']
+          try:
+            df['end_date'] =  df['end_date'].astype(object).astype(str)
+          except Exception, e:
+            print str(e)
+            print df['end_date']
         dfList = PandasUtils.convertDfToDictrows(df)
         dfList = [DictUtils.filterDictOnBlanks(DictUtils.filterDictOnNans(item)) for item in dfList]
         datasets_to_load[sht] = datasets_to_load[sht] + dfList
@@ -205,33 +212,35 @@ def main():
   base_url = configItems['base_url_qry']
   fbf_datasets_inventory = configItems['dd']['Dataset Inventory']['fbf']
   fbf_systems_inventory = configItems['dd']['Systems Inventory']['fbf']
-  print fbf_systems_inventory
+  #print fbf_systems_inventory
   results = getCountsDepts(sQobj,base_url, fbf_systems_inventory, 'department_custodian', 'submitted_dataset_row_count')
-  print results
+  
+  #results = getCountsDepts(sQobj,base_url, fbf_datasets_inventory, 'department_or_division', 'submitted_dataset_row_count')
+
+  #print results
   if results:
     for result in results:
       result['department_custodian'] = str(result['department_custodian']).strip()
       if result['department_custodian'] == '311.0':
         result['department_custodian'] = '311'
-      print result['department_custodian'] 
+      dept = result['department_custodian'] 
       result['submitted'] = True
-      result['submitted_systems_row_count'] = int(getSubmittedCnt(sQobj,base_url, fbf_systems_inventory, 'department_custodian', 'submitted_systems_row_count', result['department_custodian'] ))
-      result['systems_required_total'] = int(getSums(sQobj,base_url, fbf_systems_inventory, 'required_fields_count', 'department_custodian', result['department_custodian'] ))
-      result['systems_required_complete'] =  int(getSums(sQobj,base_url, fbf_systems_inventory, 'required_fields_complete', 'department_custodian', result['department_custodian'] ))
+      result['submitted_systems_row_count'] = int(getSubmittedCnt(sQobj,base_url, fbf_systems_inventory, 'department_custodian', 'submitted_systems_row_count', dept ))
+      result['systems_required_total'] = int(getSums(sQobj,base_url, fbf_systems_inventory, 'required_fields_count', 'department_custodian', dept ))
+      result['systems_required_complete'] =  int(getSums(sQobj,base_url, fbf_systems_inventory, 'required_fields_complete', 'department_custodian', dept ))
       result['systems_required_remaining'] = result['systems_required_total'] - result['systems_required_complete']
-      result['datasets_required_total'] = int(getSums(sQobj,base_url, fbf_datasets_inventory , 'required_fields_count', 'department_or_division', result['department_custodian'] ))
-      result['datasets_required_complete'] =  int(getSums(sQobj,base_url, fbf_datasets_inventory , 'required_fields_complete', 'department_or_division', result['department_custodian'] ))
+      result['datasets_required_total'] = int(getSums(sQobj,base_url, fbf_datasets_inventory , 'required_fields_count', 'department_or_division', dept ))
+      result['datasets_required_complete'] =  int(getSums(sQobj,base_url, fbf_datasets_inventory , 'required_fields_complete', 'department_or_division', dept ))
       result['datasets_required_remaining'] = result['datasets_required_total'] - result['datasets_required_complete']
-  
+
   dsse = JobStatusEmailerComposer(configItems, logger, jobType)
   dataset_info = {'Socrata Dataset Name': configItems['dd']['index']['dataset_name'], 'SrcRecordsCnt':len(results), 'DatasetRecordsCnt':0, 'fourXFour': configItems['dd']['index']['fbf'], 'row_id': 'department_or_division'}
   dataset_info = scrud.postDataToSocrata(dataset_info, results )
   dataset_info['isLoaded'] = 'success'
   dataset_results.append(dataset_info)
   dsse.sendJobStatusEmail(dataset_results)
-  #print dataset_results
-
-#change subject line on ETL email
+  print dataset_results
+  #change subject line on ETL email
 
 
 if __name__ == "__main__":

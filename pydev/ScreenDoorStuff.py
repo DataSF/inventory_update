@@ -52,8 +52,8 @@ class ScreenDoorStuff:
     def set_FileInfo(self):
         files_to_download = []
         for response in self._responses:
-            print response
-            print "********"
+            #print response
+            #print "********"
             response_items =  response['responses'].keys()
             for item in response_items:
                 response_file_dictList = response['responses'][item]

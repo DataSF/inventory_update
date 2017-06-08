@@ -29,7 +29,7 @@ socrata_client_config_fname: socrata_config.yaml
 
 dd:
   index:
-    fbf: qjg2-n324
+    fbf: 2cgj-9c29
     qryCols: coordinator_name, primary_data_coordinator, secondary_data_coordinator, template_file_name WHERE primary_data_coordinator IS NOT NULL
     dataset_name: Index
 
