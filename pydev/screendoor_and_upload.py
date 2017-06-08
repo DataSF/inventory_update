@@ -224,7 +224,8 @@ def main():
       if result['department_custodian'] == '311.0':
         result['department_custodian'] = '311'
       dept = result['department_custodian'] 
-      result['submitted'] = True
+      result['department_or_division'] = dept
+      result['submitted'] = 'Yes'
       result['submitted_systems_row_count'] = int(getSubmittedCnt(sQobj,base_url, fbf_systems_inventory, 'department_custodian', 'submitted_systems_row_count', dept ))
       result['systems_required_total'] = int(getSums(sQobj,base_url, fbf_systems_inventory, 'required_fields_count', 'department_custodian', dept ))
       result['systems_required_complete'] =  int(getSums(sQobj,base_url, fbf_systems_inventory, 'required_fields_complete', 'department_custodian', dept ))
