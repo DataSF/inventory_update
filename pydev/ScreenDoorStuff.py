@@ -16,8 +16,10 @@ class ScreenDoorStuff:
         self._screendoor_configs = ConfigUtils.setConfigs(self._config_dir, self._screendoor_config_file)
         self._api_key = self._screendoor_configs['api_key']
         self._projectid = str(self._screendoor_configs['projectid'])
-        self._responses_url = self.set_responsesUrl()
+        #self._responses_url = self.set_responsesUrl()
+        #print self._responses_url 
         self._attachment_url = self._screendoor_configs['attachment_url']
+        self._number_of_pages = self.set_number_of_pages()
         self._responses = self.set_reponses()
         #self._pickle_dir = configItems['pickle_dir']
         self._wkbk_uploads_dir = self._screendoor_configs['wkbk_uploads_dir']
@@ -26,18 +28,24 @@ class ScreenDoorStuff:
         #self._current_date = datetime.datetime.now().strftime("%Y_%m_%d_")
         self._current_date = DateUtils.get_current_date_year_month_day()
 
+    def set_number_of_pages(self):
+      if 'number_of_pages' in self._screendoor_configs.keys():
+        return self._screendoor_configs['number_of_pages']
+      return 10
 
-    def set_responsesUrl(self):
+    def set_responsesUrl(self, page):
         responses_url = self._screendoor_configs['responses_url']
-        responses_url =  responses_url % (self._projectid,self._api_key)
+        responses_url =  responses_url % (self._projectid,page, self._api_key)
         return responses_url
 
     def set_reponses(self):
-        responses = ""
-        try:
+        all_responses = []
+        for page in range(self._number_of_pages):
+          responses_url = self.set_responsesUrl(page)
+          try:
             buffer = BytesIO()
             c = pycurl.Curl()
-            c.setopt(c.URL, self._responses_url)
+            c.setopt(c.URL, responses_url)
             c.setopt(c.WRITEDATA, buffer)
             responses = c.perform()
             c.close()
@@ -45,23 +53,25 @@ class ScreenDoorStuff:
             # Body is a byte string.
             # We have to know the encoding in order to print it to a text file such as standard output.
             responses = json.loads(body.decode('iso-8859-1'))
-        except Exception, e:
+            all_responses = all_responses + responses
+          except Exception, e:
             print str(e)
-        return responses
+        return all_responses
 
     def set_FileInfo(self):
-        files_to_download = []
-        for response in self._responses:
-            #print response
-            #print "********"
-            response_items =  response['responses'].keys()
-            for item in response_items:
-                response_file_dictList = response['responses'][item]
-                for file_info in response_file_dictList:
-                    #file_info['submitted_at'] = response['submitted_at']
-                    files_to_download.append(file_info)
+      files_to_download = []
+      for response in self._responses:
+        #print response
+        #print "********"
+        response_items =  response['responses'].keys()
+        for item in response_items:
+          response_file_dictList = response['responses'][item]
+          for file_info in response_file_dictList:
+            #file_info['submitted_at'] = response['submitted_at']
+            files_to_download.append(file_info)
         print "*****downloading " + str(len(files_to_download)) +" files from screendoor*****"
         return files_to_download
+       
 
     def setDownloadUrl(self, fileId):
         return self._attachment_url % (fileId)

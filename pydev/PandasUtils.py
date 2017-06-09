@@ -83,6 +83,10 @@ class PandasUtils:
     return df.groupby(group_by_list).size().reset_index(name='count')
 
   @staticmethod
+  def getGrpByCountStarColumnMax(df, group_by_list, max_cols_list)
+    return  df.groupby(group_by_list, sort=False)max_cols_list.max().reset_index()
+  
+  @staticmethod
   def colToLower(df, field_name):
     '''strips off white space and converts the col to lower'''
     df[field_name] = df[field_name].astype(str)

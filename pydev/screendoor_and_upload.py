@@ -128,7 +128,7 @@ def main():
   scrud = SocrataCRUD(client, clientItems, configItems, logger)
   screendoor_stuff = ScreenDoorStuff(configItems)
   sQobj = SocrataQueries(clientItems, configItems, logger)
-  #qryColsSubmitted = 'department_or_division WHERE submitted = True'
+  qryColsSubmitted = 'department_or_division WHERE submitted = True'
   #submitted =  DatasetUtils.getDatasetAsDictListPageThrough(configItems['dd']['index']['fbf'], sQobj, qryColsSubmitted)
   #submitted = [ item['department_or_division'] for item in submitted ]
   submitted = []
@@ -141,33 +141,25 @@ def main():
   #grab the most recent submission
   maxResponses = {}
   dept_key =  str(screendoor_stuff._screendoor_configs['keys_to_keep']['department']).strip()
-  for response in screendoor_stuff._responses:
-    #print
-    #print response
-    if str(response['responses'][dept_key]).strip() in submitted:
-      continue
-    elif str(response['responses'][dept_key]).strip() in maxResponses.keys():
-      #need to find the actual time duration here
-      #print "original"
-      #print maxResponses[ response['responses'][dept_key]]
-      #print "new"
-      #print response['submitted_at']
-      if DateUtils.compare_two_timestamps(response['submitted_at'], maxResponses[ response['responses'][dept_key]]):
-        #print "we got a later submission"
-        #print response['submitted_at']
-        maxResponses[ response['responses'][dept_key]] = response['submitted_at']
-    else:
-      maxResponses[ response['responses'][dept_key]] = response['submitted_at']
+  df =  PandasUtils.makeDfFromJson(screendoor_stuff._responses)
+  df_grp_max_submission = df.groupby(['responses.'+dept_key], sort=False)['submitted_at'].max().reset_index()
+  df_grp_max_submissionList = PandasUtils.convertDfToDictrows(df_grp_max_submission)
+  mappedMaxSubmission = PandasUtils.getDictListAsMappedDict('responses.'+dept_key, 'submitted_at', df_grp_max_submissionList)
+  #print df_grp_max_submission
+
   for response in screendoor_stuff._responses:
     dept = str(response['responses'][dept_key]).strip()
-    if (response['submitted_at'] == maxResponses[dept]) and (not(dept in submitted )):
+    if (response['submitted_at'] == mappedMaxSubmission[dept]):
       file_info =  response['responses'][screendoor_stuff._screendoor_configs['keys_to_keep']['file']][0]
       file_info['submitted_at'] = response['submitted_at']
       file_info['dept'] = dept
       downloadFiles.append(file_info)
   #download the files and parse the workbks
   shts_to_keep = configItems['wkbks']['shts_to_keep']
+
+
   for fn in downloadFiles:
+    #print fn 
     downloaded = screendoor_stuff.getAttachment(fn['id'], fn['filename'])
     if downloaded:
       wkbk_stuff = WkbkUtils.get_shts(download_dir + fn['filename'])
@@ -223,7 +215,10 @@ def main():
       result['department_custodian'] = str(result['department_custodian']).strip()
       if result['department_custodian'] == '311.0':
         result['department_custodian'] = '311'
-      dept = result['department_custodian'] 
+      dept = result['department_custodian']
+      print 
+      print dept 
+      print  
       result['department_or_division'] = dept
       result['submitted'] = 'Yes'
       result['submitted_systems_row_count'] = int(getSubmittedCnt(sQobj,base_url, fbf_systems_inventory, 'department_custodian', 'submitted_systems_row_count', dept ))
