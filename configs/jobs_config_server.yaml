@@ -40,8 +40,6 @@ dd:
     dataset_name: Systems Inventory Submission
 
 
-
-https://data.sfgov.org/resource/kj3r-qxbq.json
 wkbks:
     shts_to_keep:  ['Systems Inventory', 'Dataset Inventory']
 
