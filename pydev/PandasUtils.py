@@ -83,7 +83,7 @@ class PandasUtils:
     return df.groupby(group_by_list).size().reset_index(name='count')
 
   @staticmethod
-  def getGrpByCountStarColumnMax(df, group_by_list, max_cols_list)
+  def getGrpByCountStarColumnMax(df, group_by_list, max_cols_list):
     return  df.groupby(group_by_list, sort=False)max_cols_list.max().reset_index()
   
   @staticmethod
