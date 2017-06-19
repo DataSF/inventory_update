@@ -17,7 +17,7 @@ class ScreenDoorStuff:
         self._api_key = self._screendoor_configs['api_key']
         self._projectid = str(self._screendoor_configs['projectid'])
         #self._responses_url = self.set_responsesUrl()
-        #print self._responses_url 
+        #print self._responses_url
         self._attachment_url = self._screendoor_configs['attachment_url']
         self._number_of_pages = self.set_number_of_pages()
         self._responses = self.set_reponses()
@@ -61,8 +61,6 @@ class ScreenDoorStuff:
     def set_FileInfo(self):
       files_to_download = []
       for response in self._responses:
-        #print response
-        #print "********"
         response_items =  response['responses'].keys()
         for item in response_items:
           response_file_dictList = response['responses'][item]
@@ -71,7 +69,7 @@ class ScreenDoorStuff:
             files_to_download.append(file_info)
         print "*****downloading " + str(len(files_to_download)) +" files from screendoor*****"
         return files_to_download
-       
+
 
     def setDownloadUrl(self, fileId):
         return self._attachment_url % (fileId)

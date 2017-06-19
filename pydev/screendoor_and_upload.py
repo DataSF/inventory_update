@@ -137,29 +137,41 @@ def main():
   remove_files = FileUtils.remove_files_on_regex(screendoor_stuff._screendoor_configs['wkbk_uploads_dir'], "*.xlsx")
   downloadFiles = []
   datasets_to_load = {'Systems Inventory': [], 'Dataset Inventory': []}
-  #
+
   #grab the most recent submission
   maxResponses = {}
   dept_key =  str(screendoor_stuff._screendoor_configs['keys_to_keep']['department']).strip()
   df =  PandasUtils.makeDfFromJson(screendoor_stuff._responses)
+  df_cont =  df[df['responses.1buyokda'] == 'Controller']
   df_grp_max_submission = df.groupby(['responses.'+dept_key], sort=False)['submitted_at'].max().reset_index()
   df_grp_max_submissionList = PandasUtils.convertDfToDictrows(df_grp_max_submission)
   mappedMaxSubmission = PandasUtils.getDictListAsMappedDict('responses.'+dept_key, 'submitted_at', df_grp_max_submissionList)
-  #print df_grp_max_submission
 
+  seenDepts = {}
   for response in screendoor_stuff._responses:
+    seen = False
     dept = str(response['responses'][dept_key]).strip()
     if (response['submitted_at'] == mappedMaxSubmission[dept]):
       file_info =  response['responses'][screendoor_stuff._screendoor_configs['keys_to_keep']['file']][0]
       file_info['submitted_at'] = response['submitted_at']
       file_info['dept'] = dept
-      downloadFiles.append(file_info)
+      if(dept in seenDepts.keys()):
+        if(seenDepts[dept] == file_info['submitted_at']):
+          seen = True
+      if(not(seen)):
+        downloadFiles.append(file_info)
+        seenDepts[dept] = file_info['submitted_at']
+  print downloadFiles
+  print
+  print
   #download the files and parse the workbks
   shts_to_keep = configItems['wkbks']['shts_to_keep']
 
-
   for fn in downloadFiles:
-    #print fn 
+    print
+    print fn
+    print
+    #print fn
     downloaded = screendoor_stuff.getAttachment(fn['id'], fn['filename'])
     if downloaded:
       wkbk_stuff = WkbkUtils.get_shts(download_dir + fn['filename'])
@@ -206,7 +218,7 @@ def main():
   fbf_systems_inventory = configItems['dd']['Systems Inventory']['fbf']
   #print fbf_systems_inventory
   results = getCountsDepts(sQobj,base_url, fbf_systems_inventory, 'department_custodian', 'submitted_dataset_row_count')
-  
+
   #results = getCountsDepts(sQobj,base_url, fbf_datasets_inventory, 'department_or_division', 'submitted_dataset_row_count')
 
   #print results
@@ -216,9 +228,9 @@ def main():
       if result['department_custodian'] == '311.0':
         result['department_custodian'] = '311'
       dept = result['department_custodian']
-      print 
-      print dept 
-      print  
+      print
+      print dept
+      print
       result['department_or_division'] = dept
       result['submitted'] = 'Yes'
       result['submitted_systems_row_count'] = int(getSubmittedCnt(sQobj,base_url, fbf_systems_inventory, 'department_custodian', 'submitted_systems_row_count', dept ))
