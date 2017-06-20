@@ -142,7 +142,6 @@ def main():
   maxResponses = {}
   dept_key =  str(screendoor_stuff._screendoor_configs['keys_to_keep']['department']).strip()
   df =  PandasUtils.makeDfFromJson(screendoor_stuff._responses)
-  df_cont =  df[df['responses.1buyokda'] == 'Controller']
   df_grp_max_submission = df.groupby(['responses.'+dept_key], sort=False)['submitted_at'].max().reset_index()
   df_grp_max_submissionList = PandasUtils.convertDfToDictrows(df_grp_max_submission)
   mappedMaxSubmission = PandasUtils.getDictListAsMappedDict('responses.'+dept_key, 'submitted_at', df_grp_max_submissionList)
@@ -163,7 +162,6 @@ def main():
         seenDepts[dept] = file_info['submitted_at']
   print downloadFiles
   print
-  print
   #download the files and parse the workbks
   shts_to_keep = configItems['wkbks']['shts_to_keep']
 
@@ -171,7 +169,6 @@ def main():
     print
     print fn
     print
-    #print fn
     downloaded = screendoor_stuff.getAttachment(fn['id'], fn['filename'])
     if downloaded:
       wkbk_stuff = WkbkUtils.get_shts(download_dir + fn['filename'])
@@ -182,16 +179,22 @@ def main():
         df = PandasUtils.renameCols(df,key_dict)
         df =  PandasUtils.fillNaWithBlank(df)
         if sht == 'Systems Inventory':
-          df['required_fields_count'] =  df.apply(lambda row: getRequiredFieldCountInventory(row), axis=1)
-          df['required_fields_complete'] =  df.apply(lambda row:getRequiredFieldsCompleteInventory(row), axis=1)
-          df['department_custodian'] = df['department_custodian'].astype(str)
-          df = df[df['department_custodian'] != '' ].reset_index()
+          try:
+            df['required_fields_count'] =  df.apply(lambda row: getRequiredFieldCountInventory(row), axis=1)
+            df['required_fields_complete'] =  df.apply(lambda row:getRequiredFieldsCompleteInventory(row), axis=1)
+            df['department_custodian'] = df['department_custodian'].astype(str)
+            df = df[df['department_custodian'] != '' ].reset_index()
+          except Exception, e:
+            print str(e)
         elif sht == 'Dataset Inventory':
-          df['required_fields_count'] =  df.apply(lambda row: getRequiredFieldCountDatasets(row), axis=1)
-          df['required_fields_complete'] =  df.apply(lambda row:getRequiredFieldsCompleteDatasets(row), axis=1)
-          df['department_or_division'] = df['department_or_division'].astype(str)
-          #print df['department_or_division']
-          df = df[df['department_or_division'] != ''].reset_index()
+          try:
+            df['required_fields_count'] =  df.apply(lambda row: getRequiredFieldCountDatasets(row), axis=1)
+            df['required_fields_complete'] =  df.apply(lambda row:getRequiredFieldsCompleteDatasets(row), axis=1)
+            df['department_or_division'] = df['department_or_division'].astype(str)
+            #print df['department_or_division']
+            df = df[df['department_or_division'] != ''].reset_index()
+          except Exception, e:
+            print str(e)
           try:
             df['start_date'] =  df['start_date'].astype(object).astype(str)
           except Exception, e:
@@ -249,7 +252,6 @@ def main():
   dsse.sendJobStatusEmail(dataset_results)
   print dataset_results
   #change subject line on ETL email
-
 
 if __name__ == "__main__":
     main()
