@@ -164,7 +164,7 @@ def main():
   print
   #download the files and parse the workbks
   shts_to_keep = configItems['wkbks']['shts_to_keep']
-
+  failed_submissions = []
   for fn in downloadFiles:
     print
     print fn
@@ -186,6 +186,7 @@ def main():
             df = df[df['department_custodian'] != '' ].reset_index()
           except Exception, e:
             print str(e)
+            failed_submissions.append(fn)
         elif sht == 'Dataset Inventory':
           try:
             df['required_fields_count'] =  df.apply(lambda row: getRequiredFieldCountDatasets(row), axis=1)
@@ -224,7 +225,6 @@ def main():
 
   #results = getCountsDepts(sQobj,base_url, fbf_datasets_inventory, 'department_or_division', 'submitted_dataset_row_count')
 
-  #print results
   if results:
     for result in results:
       result['department_custodian'] = str(result['department_custodian']).strip()
@@ -243,6 +243,24 @@ def main():
       result['datasets_required_total'] = int(getSums(sQobj,base_url, fbf_datasets_inventory , 'required_fields_count', 'department_or_division', dept ))
       result['datasets_required_complete'] =  int(getSums(sQobj,base_url, fbf_datasets_inventory , 'required_fields_complete', 'department_or_division', dept ))
       result['datasets_required_remaining'] = result['datasets_required_total'] - result['datasets_required_complete']
+
+  if(len(failed_submissions) > 0):
+    for failed_submission in failed_submissions:
+      result = {}
+      dept = failed_submission['dept']
+      print "***failed dept submission**"
+      print dept
+      result['department_or_division'] = dept
+      result['submitted'] = 'Yes'
+      result['submitted_systems_row_count'] = 0
+      result['systems_required_total'] = int(getSums(sQobj,base_url, fbf_systems_inventory, 'required_fields_count', 'department_custodian', dept ))
+      result['systems_required_complete'] =  int(getSums(sQobj,base_url, fbf_systems_inventory, 'required_fields_complete', 'department_custodian', dept ))
+      result['systems_required_remaining'] = result['systems_required_total'] - result['systems_required_complete']
+      result['datasets_required_total'] = int(getSums(sQobj,base_url, fbf_datasets_inventory , 'required_fields_count', 'department_or_division', dept ))
+      result['datasets_required_complete'] =  int(getSums(sQobj,base_url, fbf_datasets_inventory , 'required_fields_complete', 'department_or_division', dept ))
+      result['datasets_required_remaining'] = result['datasets_required_total'] - result['datasets_required_complete']
+      print result
+      results.append(result)
 
   dsse = JobStatusEmailerComposer(configItems, logger, jobType)
   dataset_info = {'Socrata Dataset Name': configItems['dd']['index']['dataset_name'], 'SrcRecordsCnt':len(results), 'DatasetRecordsCnt':0, 'fourXFour': configItems['dd']['index']['fbf'], 'row_id': 'department_or_division'}
